@@ -1,0 +1,4 @@
+format_string="Frm.*" 
+cmd="grep -o \"$format_string\" $cons"
+cmd="$cmd|awk '{print \$$idx}'"
+cmd="$cmd|tr -t '\n' ' '"

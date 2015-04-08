@@ -1,0 +1,45 @@
+cmd="$cmd --frame-threads $frame_threads"
+if [ $wpp_threads -ge $lookahead_threads ];then
+cmd="$cmd --threads $wpp_threads"
+else
+cmd="$cmd --threads $lookahead_threads"
+wpp_threads=$lookahead_threads
+fi
+
+if [ $wpp_threads -gt 1 ];then
+#cmd="$cmd --no-wpp"
+#else
+cmd="$cmd --wpp"
+fi
+
+bpyr_cl=("--no-b-pyramid" "--b-pyramid")
+mbtree_cl=("--no-cutree" "--cutree")
+
+cmd="$cmd --no-weightp"
+cmd="$cmd --info"
+
+tmp_flag=$(($trace_flag&2))
+if [ $tmp_flag -eq 2 ];then
+cmd="$cmd --recon $dump_file_rec"
+fi
+
+cmd="$cmd --no-signhide"
+
+sao_cl=("--no-sao" "--sao")
+cmd="$cmd ${sao_cl[$b_sao]}"
+
+amp_cl=("--no-amp" "--amp")
+cmd="$cmd ${amp_cl[$b_amp]}"
+
+if [ "$b_open_gop" -eq 0 ];then
+cmd="$cmd --no-open-gop"
+fi
+
+if [ "$b_repeat_headers" -eq 0 ];then
+cmd="$cmd --no-repeat-headers"
+else
+cmd="$cmd --repeat-headers"
+fi
+
+. /cygdrive/d/workspace/as265_shell_scripts/create_cl_x26x.seg
+

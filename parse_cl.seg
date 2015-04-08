@@ -1,0 +1,159 @@
+usage(){
+    echo "$0 [option]"
+    echo "options:"
+    echo ' -i input_path'
+    echo ' -o output_path'
+    echo ' -I I frame interval'
+    echo ' -f frames to be encoded'
+    echo ' -F frame parallelism threads'
+    echo ' -W WPP threads'
+    echo ' -L Lookahead threads'
+    echo ' -l number of lookahead frames'
+    echo ' -h print this help'
+    echo ' -H print the help of encoder'
+    echo ' -q qp'
+    echo ' -r ratecontrol method'
+    echo ' -B bitrate'
+    echo ' -V vbv_max_bitrate'
+    echo ' -S vbv_buffer_size'
+    echo ' -b bframes'
+    echo ' -M bref/b-pyramid/hierarchical'
+    echo ' -a aq-mode:0 disabled, 1 Variance AQ, Auto-Variance AQ'
+    echo ' -s seqname'
+    echo ' -R ref number'
+    echo ' -e encoder_id'
+    echo ' -t use vbv-init-time'
+    echo ' -y dump-yuv'
+    echo ' -C extra command lines'
+    echo ' -O Lowres:0 auto, 1 semi, 2 quater'
+    echo ' -p rc pass:0~3'
+    echo ' -P qp step'
+    echo ' -A cu tree'
+    echo ' -E resolution: widthxheight'
+    echo ' -c scenecut value'
+    echo ' -G open-gop'
+    echo ' -D bframe adaptive'
+}
+
+print_encoder_help(){
+    if [ "$encoder_id" = "" ];then
+        echo 'please set the encoder_id value'
+    else
+        exe="${encoder_paths[$encoder_id]}${encoder_executors[$encoder_id]}"
+        cmd="$exe ${encoder_helps[$encoder_id]}"
+        eval $cmd
+    fi
+}
+
+while getopts ":i:o:I:f:F:W:L:l:hHq:r:B:V:S:b:Ma:s:R:e:t:yC:O:p:P:AE:c:GD:" OPT; do
+    case ${OPT} in
+        "i") input_path=${OPTARG} ;;
+        "o") output_path=${OPTARG} ;;
+        "I") nIntraPicInterval=${OPTARG} 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}I${OPTARG}"
+             ;;
+        "f") frame_num_to_encode=${OPTARG} 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}f${OPTARG}"
+             ;;
+        "F") frame_threads=${OPTARG} 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}F${OPTARG}"
+             ;;
+        "W") wpp_threads=${OPTARG} 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}W${OPTARG}"
+             ;;
+        "L") lookahead_threads=${OPTARG} 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}L${OPTARG}"
+             ;;
+        "l") rc_i_lookahead=${OPTARG} 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}l${OPTARG}"
+             ;;
+        "h") usage;exit ;;
+        "H") print_encoder_help;exit;;
+        "q") nQp=${OPTARG} 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}q${OPTARG}"
+             ;;
+        "r") eRcType=${OPTARG} 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}r${OPTARG}"
+             ;;
+        "B") tmp_nBitrate=${OPTARG} 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}B${OPTARG}"
+             ;;
+        "V") tmp_nMaxBitrate=${OPTARG} 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}V${OPTARG}"
+             ;;
+        "S") tmp_vbv_buffer_size=${OPTARG} 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}S${OPTARG}"
+             ;;
+        "b") nBframe=${OPTARG} 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}b${OPTARG}"
+             ;;
+        "M") bExistRefB=1 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}M"
+             ;;
+        "a") rc_i_aq_mode=${OPTARG} 
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}a${OPTARG}"
+             ;;
+        "s") seq_name=${OPTARG} ;;
+        "R") nMaxRefNum=${OPTARG}
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}R${OPTARG}"
+             ;;
+        "e") encoder_id=${OPTARG};;
+        "t") vbv_buffer_init_time=${OPTARG}
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}t${OPTARG}"
+             ;;
+        "y") ((trace_flag|=2));;
+        "C") extra_cls=${OPTARG};;
+        "O") rc_i_lowres=${OPTARG}
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}O${OPTARG}"
+             ;;
+        "p") rc_i_pass=${OPTARG}
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}p${OPTARG}"
+             ;;
+        "P") rc_i_qp_step=${OPTARG}
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}P${OPTARG}"
+             ;;
+        "A") rc_b_cutree=1
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}A"
+             ;;
+        "E") tmp_nSrcWidth=${OPTARG%x*}
+             tmp_nSrcHeight=${OPTARG#*x}
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}E${OPTARG}"
+             ;;
+        "c") i_scenecut_threshold=${OPTARG}
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}c${OPTARG}"
+             ;;
+        "G") b_open_gop=1
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}G"
+             ;;
+        "D") i_bframe_adaptive=${OPTARG}
+             [ "$tags" == "" ]&&tags="_"
+             tags="${tags}D${OPTARG}"
+             ;;
+        *)
+            echo "Unexpected Arguments"
+            exit;;
+    esac
+done 

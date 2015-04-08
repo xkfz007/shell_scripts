@@ -1,0 +1,5 @@
+format_string="POC.*bits" 
+cmd="grep -o \"$format_string\" $cons"
+cmd="$cmd|awk '{print \$$idx}'"
+cmd="$cmd|awk -F\( '{print \$1}'"
+cmd="$cmd|tr -t '\n' ' '"

@@ -1,0 +1,52 @@
+
+cmd="$cmd --rc-lookahead $rc_i_lookahead"
+cmd="$cmd -b $nBframe"
+cmd="$cmd --ref $nMaxRefNum"
+cmd="$cmd --aq-mode $rc_i_aq_mode"
+cmd="$cmd ${bpyr_cl[$bExistRefB]}"
+cmd="$cmd ${mbtree_cl[$rc_b_cutree]}"
+
+if [ ${rc_methods[$eRcType]} == "CQP" ];then
+    cmd="$cmd --qp $nQp"
+    cmd="$cmd --ipratio 1.0"
+    cmd="$cmd --pbratio 1.0"
+else
+    cmd="$cmd --bitrate $nBitrate"
+    cmd="$cmd --vbv-maxrate $nMaxBitrate"
+    cmd="$cmd --vbv-bufsize $vbv_buffer_size"
+    if [ $vbv_buffer_init_time -gt 0 ];then
+    vbv_buffer_init=$(awk -v x=$vbv_buffer_init_time -v y=$nMaxBitrate -v z=$vbv_buffer_size 'BEGIN {print x/1000.0*y/z}')
+    else
+    vbv_buffer_init=0.9
+    fi
+    cmd="$cmd --vbv-init $vbv_buffer_init"
+    
+fi
+cmd="$cmd --pass $rc_i_pass"
+
+cmd="$cmd -o $output_filename $input_path$input_filename"
+cmd="$cmd --input-res ${nSrcWidth}x${nSrcHeight}"
+cmd="$cmd --fps $fFrameRate"
+cmd="$cmd -I $nIntraPicInterval"
+cmd="$cmd --frames $frame_num_to_encode"
+
+cmd="$cmd --scenecut $i_scenecut_threshold"
+
+cmd="$cmd --b-adapt $i_bframe_adaptive"
+
+if [ "$b_asm" -eq 0 ];then
+cmd="$cmd --no-asm"
+fi
+
+me_cl=("dia" "hex" "umh" "esa" "tesa")
+cmd="$cmd --me ${me_cl[$me_method]}"
+cmd="$cmd --merange $i_me_range"
+cmd="$cmd --subme $i_subpel_refine"
+
+#cmd="$cmd --tune psnr"
+cmd="$cmd --psnr"
+cmd="$cmd --no-progress"
+cmd="$cmd  --log-level debug"
+
+
+. /cygdrive/d/workspace/as265_shell_scripts/create_cl_common.seg

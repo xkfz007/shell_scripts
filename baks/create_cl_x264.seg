@@ -1,0 +1,40 @@
+cmd="$cmd --rc-lookahead $rc_i_lookahead"
+cmd="$cmd -b $nUnRefB_before"
+cmd="$cmd --ref $nMaxForwardRefNum"
+cmd="$cmd --aq-mode $rc_i_aq_mode"
+cmd="$cmd ${bpyr_cl[$bExistRefB]}"
+cmd="$cmd ${mbtree_cl[$rc_b_cutree]}"
+
+if [ ${rc_methods[$eRcType]} == "CQP" ];then
+    cmd="$cmd --qp $nQp"
+else
+    cmd="$cmd --bitrate $nBitrate"
+    cmd="$cmd --vbv-maxrate $nMaxBitrate"
+    cmd="$cmd --vbv-bufsize $vbv_buffer_size"
+fi
+
+cmd="$cmd -o $output_filename $input_path$input_filename"
+cmd="$cmd --input-res ${nSrcWidth}x${nSrcHeight}"
+cmd="$cmd --fps $fFrameRate"
+cmd="$cmd -I $nIntraPicInterval"
+cmd="$cmd --frames $frame_num_to_encode"
+
+cmd="$cmd --b-adapt 0"
+cmd="$cmd --no-scenecut"
+cmd="$cmd --no-asm"
+cmd="$cmd --tune psnr --psnr"
+cmd="$cmd  --log-level debug"
+
+cmd="$cmd --threads $frame_threads"
+cmd="$cmd --lookahead-threads $lookahead_threads"
+
+bpyr_cl=("--b-pyramid none" "--b-pyramid strict")
+mbtree_cl=("--no-mbtree" "--mbtree")
+
+
+
+cmd="$cmd --weightp 0"
+cmd="$cmd --no-psy"
+
+
+

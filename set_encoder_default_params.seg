@@ -1,0 +1,177 @@
+#default values of as265
+output_path="f:/encoder_test_output/"
+input_path="e:/sequences/"
+
+#sequence related params in set_seq
+
+#debug related paramters
+printf_flag=1 #225
+trace_flag=0 #7
+measure_quality_flag=1
+
+frame_num_to_encode=100
+
+#cu pu tu
+nMaxCUSize=64
+nMaxCUDepth=3
+nQuadtreeTULog2MaxSize=5
+nQuadtreeTULog2MinSize=2
+nQuadtreeTUMaxDepthIntra=3
+nQuadtreeTUMaxDepthInter=3
+
+#gop
+nIntraPicInterval=30
+nMaxRefNum=1
+bExistRefB=0
+nBframe=0
+bEnableMultipleSubLayer=0
+DecodingRefreshType=2
+
+b_open_gop=0
+i_scenecut_threshold=0
+i_bframe_adaptive=0
+b_repeat_headers=0
+
+#feature
+b_amp=0
+b_dbl=1
+b_sao=0
+
+#rc
+rc_methods=("CQP" "CBR" "QUALITY_RANK" "VBR" "CONFERENCE" "VBR_TWOPASS_ANALYSE" "VBR_TWOPASS_ENC" "VBR_Q" "ABR" )
+eRcType=0
+nQp=33
+nBitrate=0
+nMaxBitrate=0
+vbv_buffer_size=0
+vbv_buffer_init_time=0
+
+#preset
+preset=5
+
+#debug parameters
+first_frame=0
+random_cost=0
+force_tu_split=0
+force_one_intra_mode=0
+b_enable_cfg=1
+
+#asm
+b_asm=1
+
+#architecture and algorithm
+architecture_id=2
+algorithm_suit_id=0
+
+frame_threads=1
+wpp_threads=1
+lookahead_threads=1
+
+rps_method=1
+
+log2_parallel_merge_level=2
+slice_temporal_mvp_enabled_flag=1
+constrained_intra_pred_flag=0
+
+me_method=1
+i_me_range=32
+i_subpel_refine=5
+b_chroma_me=1
+
+rc_f_rate_tolerance=1.0
+rc_f_rf_constant=23
+rc_i_qp_min=0
+rc_i_qp_max=51
+rc_i_qp_step=4
+rc_f_ip_factor=1.4
+rc_f_pb_factor=1.3
+rc_i_aq_mode=0
+rc_f_aq_strength=1.0
+rc_i_lookahead=10
+rc_b_cutree=0
+rc_i_lowres=0
+rc_i_pass=0
+
+#default values of x264 are listed in the following:
+
+#default values of x264 are listed in the following:
+
+
+#encoders information
+declare -A encoder_executors
+encoder_executors["as265"]="cli_ashevc.exe"
+encoder_executors["x265"]="x265.exe"
+encoder_executors["x264"]="x264.exe"
+encoder_executors["x264L"]="x264.exe"
+encoder_executors["hme"]="TAppEncoder.exe"
+#encoder_executors["hmd"]="hmdecoder11.0.exe"
+#encoder_executors["jmd"]="jmdecoder18.5.exe"
+#encoder_executors["ffmpeg"]="ffmpeg.exe"
+
+declare -A encoder_paths
+common_path="/cygdrive/d/workspace/"
+#encoder_paths["as265"]=${common_path}"arcsoft_codes/HEVC_Codec/bin/Win32/Release/" 
+encoder_paths["as265"]=${common_path}"arcsoft_codes/HEVC_Codec/HEVC_Encoder/bin/x64/Release_WithTrace/" 
+
+#encoder_paths["x265"]=${common_path}"src.x265/multicoreware-x265_latest/build/vc10-x86_64/Release/"
+#encoder_paths["x265"]=${common_path}"src.x265/multicoreware-x265-hfz/build/vc10-x86_64/Release/"
+#encoder_paths["x265"]=${common_path}"arcsoft_codes/HEVC_Codec/HEVC_Encoder/multicoreware-x265_stable_v1.4_20141101_rc/build/vc10-x86_64/Release/"
+#encoder_paths["x265"]=${common_path}"arcsoft_codes/HEVC_Codec/HEVC_Encoder/multicoreware-x265_stable_v1.5_20150214_rc/build/vc10-x86_64/Release/"
+encoder_paths["x265"]=${common_path}"arcsoft_codes/HEVC_Codec/HEVC_Encoder/tool_X265_stable_2015_02_14_b6be305a2f99_modified_for_performance_test/build/vc10-x86_64/Release/"
+
+encoder_paths["x264L"]=${common_path}"src.x264/x264_latest/bin/Release/"
+encoder_paths["x264"]=${common_path}"src.x264/x264-snapshot-20121028-2245-win-hfz/Test_Project/Test_Windows/Release/"
+encoder_paths["hme"]=${common_path}"src.hm/svn_HEVCSoftware/bin/vc10/Win32/Release/"
+#encoder_paths["hmd"]="/cygdrive/e/tools/video_decoders/"
+#encoder_paths["jmd"]="/cygdrive/e/tools/video_decoders/"
+#encoder_paths["ffmpeg"]="/cygdrive/e/tools/ffmpeg/"
+
+declare -A encoder_helps
+encoder_helps["as265"]=""
+encoder_helps["x265"]="--log-level full --help"
+encoder_helps["x264"]="--fullhelp"
+encoder_helps["x264L"]="--fullhelp"
+encoder_helps["hme"]="--help"
+#encoder_helps["hmd"]="--help"
+#encoder_helps["jmd"]="-h"
+#encoder_helps["ffmpeg"]="--help"
+
+#scripts path
+scripts_path="/cygdrive/d/workspace/as265_shell_scripts/"
+
+declare -A cl_list
+cl_list["as265"]=${scripts_path}"create_cl_as265.seg"
+cl_list["x265"]=${scripts_path}"create_cl_x265.seg"
+cl_list["x264"]=${scripts_path}"create_cl_x264.seg"
+cl_list["x264L"]=${scripts_path}"create_cl_x264.seg"
+#cl_list["hmd"]=${scripts_path}"create_cl_common.seg"
+#cl_list["jmd"]=${scripts_path}"create_cl_common.seg"
+#cl_list["ffmpeg"]=${scripts_path}"create_cl_common.seg"
+
+declare -A rc_info_list
+rc_info_list["as265"]="obtain_rc_info_as265"
+rc_info_list["x265"]="obtain_rc_info_x265"
+rc_info_list["x264"]="obtain_rc_info_x264"
+#rc_info_list["x264_2012"]=
+
+declare -A final_bitrate_list
+final_bitrate_list["as265"]="obtain_final_bitrate_as265"
+final_bitrate_list["x265"]="obtain_final_bitrate_x265"
+final_bitrate_list["x264"]="obtain_final_bitrate_x264"
+
+declare -A psnr_info_list
+psnr_info_list["as265"]="obtain_psnr_info_as265"
+psnr_info_list["x265"]="obtain_psnr_info_x265"
+psnr_info_list["x264"]="obtain_psnr_info_x264"
+
+declare -A ssim_info_list
+ssim_info_list["as265"]="obtain_ssim_info_as265"
+ssim_info_list["x265"]="obtain_ssim_info_x265"
+ssim_info_list["x264"]="obtain_ssim_info_x264"
+
+declare -A frame_num_list
+frame_num_list["as265"]="obtain_frame_num_as265"
+frame_num_list["x265"]="obtain_frame_num_x265"
+frame_num_list["x264"]="obtain_frame_num_x264"
+
+

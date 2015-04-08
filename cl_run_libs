@@ -1,0 +1,8 @@
+
+. /cygdrive/d/workspace/as265_shell_scripts/functions.lbr
+. /cygdrive/d/workspace/as265_shell_scripts/set_encoder_default_params.seg
+
+. /cygdrive/d/workspace/as265_shell_scripts/parse_cl.seg
+
+. /cygdrive/d/workspace/as265_shell_scripts/set_seq_related_params.seg
+

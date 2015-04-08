@@ -1,0 +1,4 @@
+
+if [ "$extra_cls" != "" ];then
+cmd="$cmd $extra_cls"
+fi

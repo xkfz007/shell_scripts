@@ -1,0 +1,111 @@
+cmd="$cmd $output_path"
+cmd="$cmd $output_filename"
+cmd="$cmd $input_path"
+cmd="$cmd $input_filename"
+
+cmd="$cmd $trace_file_cabac"
+cmd="$cmd $trace_file_general"
+cmd="$cmd $dump_file_rec"
+cmd="$cmd $trace_file_prd_y"
+cmd="$cmd $trace_file_prd_uv"
+cmd="$cmd $trace_file_cabacrdo"
+cmd="$cmd $trace_file_arch1rdo"
+
+cmd="$cmd $printf_flag"
+cmd="$cmd $trace_flag"
+cmd="$cmd $measure_quality_flag"
+
+cmd="$cmd $nSrcWidth"
+cmd="$cmd $nSrcHeight"
+cmd="$cmd $fFrameRate"
+cmd="$cmd $frame_num_to_encode"
+
+# cu pu tu 
+cmd="$cmd $nMaxCUSize"
+cmd="$cmd $nMaxCUDepth"
+cmd="$cmd $nQuadtreeTULog2MaxSize"
+cmd="$cmd $nQuadtreeTULog2MinSize"
+cmd="$cmd $nQuadtreeTUMaxDepthIntra"
+cmd="$cmd $nQuadtreeTUMaxDepthInter"
+
+# gop 
+cmd="$cmd $nIntraPicInterval"
+cmd="$cmd $nMaxRefNum"
+cmd="$cmd $bExistRefB"
+cmd="$cmd $nBframe"
+cmd="$cmd $bEnableMultipleSubLayer"
+cmd="$cmd $DecodingRefreshType"
+
+cmd="$cmd $b_open_gop"
+cmd="$cmd $i_scenecut_threshold"
+cmd="$cmd $i_bframe_adaptive"
+
+# feature
+cmd="$cmd $b_amp"
+cmd="$cmd $b_dbl"
+cmd="$cmd $b_sao"
+
+# rc 
+cmd="$cmd $eRcType"
+cmd="$cmd $nQp"
+cmd="$cmd $nBitrate"
+cmd="$cmd $nMaxBitrate"
+cmd="$cmd $vbv_buffer_size"
+cmd="$cmd $vbv_buffer_init_time"
+
+#preset
+cmd="$cmd $preset"
+
+# debug ters 
+cmd="$cmd $first_frame"
+cmd="$cmd $random_cost"
+cmd="$cmd $force_tu_split"
+cmd="$cmd $force_one_intra_mode"
+
+cmd="$cmd $b_enable_cfg"
+
+# asm
+cmd="$cmd $b_asm"
+
+# architecture and algorithm 
+cmd="$cmd $architecture_id"
+cmd="$cmd $algorithm_suit_id"
+
+# threading 
+cmd="$cmd $frame_threads"
+cmd="$cmd $wpp_threads"
+cmd="$cmd $lookahead_threads"
+
+# rps 
+cmd="$cmd $rps_method"
+
+# pred 
+cmd="$cmd $log2_parallel_merge_level"
+cmd="$cmd $slice_temporal_mvp_enabled_flag"
+cmd="$cmd $constrained_intra_pred_flag"
+
+# analyze 
+cmd="$cmd $me_method"
+cmd="$cmd $i_me_range"
+cmd="$cmd $i_subpel_refine"
+cmd="$cmd $b_chroma_me"
+
+# rc 
+cmd="$cmd $rc_f_rate_tolerance"
+cmd="$cmd $rc_f_rf_constant"
+cmd="$cmd $rc_i_qp_min"
+cmd="$cmd $rc_i_qp_max"
+cmd="$cmd $rc_i_qp_step"
+cmd="$cmd $rc_f_ip_factor"
+cmd="$cmd $rc_f_pb_factor"
+cmd="$cmd $rc_i_aq_mode"
+cmd="$cmd $rc_f_aq_strength"
+cmd="$cmd $rc_i_lookahead"
+cmd="$cmd $rc_b_cutree"
+cmd="$cmd $rc_i_lowres"
+cmd="$cmd $rc_i_pass"
+
+if [ "$extra_cls" != "" ];then
+cmd="$cmd $extra_cls"
+fi
+

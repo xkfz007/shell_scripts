@@ -1,0 +1,8 @@
+
+cmd="${encoder_paths[$encoder_id]}${encoder_executors[$encoder_id]}"
+
+. ${cl_list[$encoder_id]}
+
+cmd="$cmd 2>&1 |tee -a $cons"
+echo $cmd >$cons
+eval $cmd

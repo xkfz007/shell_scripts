@@ -1,0 +1,38 @@
+cons=${seq_name}${tags}_cons.log
+reso_info=($(get_reso_info $seq_name))
+nSrcWidth=${reso_info[0]}
+nSrcHeight=${reso_info[1]}
+fFrameRate=${reso_info[2]}
+
+output_filename=${seq_name}${tags}_str.bin
+input_filename=${seq_name}.yuv
+trace_file_cabac=${seq_name}${tags}_cabac.log
+trace_file_general=${seq_name}${tags}_general.log
+dump_file_rec=${seq_name}${tags}_rec.yuv
+trace_file_prd_y=${seq_name}${tags}_prdy.log
+trace_file_prd_uv=${seq_name}${tags}_prduv.log
+trace_file_cabacrdo=${seq_name}${tags}_cabacrdo.log
+trace_file_arch1rdo=${seq_name}${tags}_arch1rdo.log
+
+rc_param=($(get_bitrate_for_rc ${rc_methods[$eRcType]} $nSrcWidth $nSrcHeight $fFrameRate))
+nBitrate=${rc_param[0]}
+nMaxBitrate=${rc_param[1]}
+vbv_buffer_size=${rc_param[2]}
+if [ "$tmp_nBitrate" != "" ];then
+nBitrate=$tmp_nBitrate
+fi
+
+if [ "$tmp_nMaxBitrate" != "" ];then
+nMaxBitrate=$tmp_nMaxBitrate
+fi
+
+if [ "$tmp_vbv_buffer_size" != "" ];then
+vbv_buffer_size=$tmp_vbv_buffer_size
+fi
+
+if [ "$tmp_nSrcWidth" != "" ];then
+nSrcWidth=$tmp_nSrcWidth
+fi
+if [ "$tmp_nSrcHeight" != "" ];then
+nSrcHeight=$tmp_nSrcHeight
+fi

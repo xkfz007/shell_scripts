@@ -1,0 +1,222 @@
+function get_bitrate_for_rc
+{
+    eRcType=$1
+    nSrcWidth=$2
+    nSrcHeight=$3
+    fFrameRate=$4
+
+    nBitrate=0
+    nMaxBitrate=0
+    vbv_buffer_size=0
+
+    # ABR
+    if [ $eRcType == "ABR" ] || [ $eRcType == "CBR" ] || [ $eRcType == "VBR" ];then
+        reso4=$nSrcWidth"x"$nSrcHeight
+        case $reso4 in
+            "2560x1600" ) base_rate=3200 ;;
+            "1920x1080" ) base_rate=1500 ;;
+            "1280x720"  ) base_rate=600 ;;
+            "1024x768"  ) base_rate=568 ;;
+            "832x480"   ) base_rate=300 ;;
+            "416x240"   ) base_rate=75 ;;
+            "640x480"   ) base_rate=222 ;;
+            "352x288"   ) base_rate=73 ;;
+            "448x336"   ) base_rate=110 ;;
+        esac
+
+        ((brate=fFrameRate*base_rate*1000/30/1000))
+        factor=2
+        ((nBitrate=brate*factor))
+    fi
+    # CBR
+    if [ $eRcType == "CBR" ];then
+        ((nMaxBitrate=nBitrate))
+        ((vbv_buffer_size=1*nBitrate))
+    fi
+
+    # VBR
+    if [ $eRcType == "VBR" ];then
+        ((nMaxBitrate=nBitrate+nBitrate/2))
+        ((vbv_buffer_size=1*nMaxBitrate))
+    fi
+    echo "$nBitrate $nMaxBitrate $vbv_buffer_size"
+}
+function get_reso_info
+{
+    seqname=$1
+    reso=${seqname#*_}
+    reso2=${reso#*x}
+    reso3=${reso2#*_}
+    nSrcWidth=${reso%x*}
+    nSrcHeight=${reso2%%_*}
+    fFrameRate=${reso3%_*}
+
+    echo "$nSrcWidth $nSrcHeight $fFrameRate"
+}
+function obtain_frame_cost
+{
+    cons=$1
+    cost=$(grep -o "slicetype_frame_cost1:poc=.*i_cost_est.*=.*" $cons |awk -F"=" '{print $3}' |tr -t '\n' ' ')
+    echo $cost
+}
+function obtain_frame_bitrate
+{
+    cons=$1
+bitrate=$(grep -o "ratecontrol_end:thread=.*poc=.*cnt=.*bits=.*bitrate=.*" $cons |awk '{print $6,$10}' |tr -t '\n' ' ')
+    echo $bitrate
+
+}
+#function obtain_frame_bits_as265
+#{
+#    cons=$1
+#bits=$(grep -o "ratecontrol_end:thread=.*poc=.*cnt=.*bits=.*bitrate=.*" $cons |awk '{print $6,$8}' |tr -t '\n' ' ')
+#        bits=$(grep -o "POC.*bits" $cons|awk '{print $8}'|tr -t '\n' ' ')
+#    echo $bits
+#}
+#function obtain_frame_bits_x265
+#{
+#    cons=$1
+#    bits=$(grep -o "POC.*bits" $cons|awk '{print $5}'|tr -t '\n' ' ')
+#    echo $bits
+#}
+#function obtain_frame_qp
+#{
+#    cons=$1
+#   qp=$(grep -o "POC.*POCG.*TID.*bRef.*Qp..." $cons |awk '{print $11}' |tr -t '\n' ' ')
+#    qp=$(grep -o "ratecontrol_end:thread=.*poc=.*cnt=.*qp_rc=.*qp_aq=.*" $cons |awk '{print $6,$8}' |tr -t '\n' ' ')
+#        qp=$(grep -o "POC.*bits" $cons|awk '{print $7}'|awk -F"(" '{print $1}'|tr -t '\n' ' ')
+#    echo $qp
+#}
+function obtain_frame_buffer_fill
+{
+    cons=$1
+buffer_fill=$(grep -o "poc=.*cnt=.*buffer_fill=.*\....." $cons |awk '{print $4,$6}' |tr -t '\n' ' ')
+    echo $buffer_fill
+
+}
+#function obtain_frame_num_as265
+#{
+#    cons=$1
+#    num=$(grep -o "POC.*POCG" $cons |awk '{print $2}'|awk 'END{print NR}')
+#    echo $num
+#}
+#function obtain_frame_num_x265
+#{
+#    cons=$1
+#    num=$(grep -o "encoded.*frames" $cons |awk '{print $2}')
+#    echo $num
+#}
+function obtain_frame_num
+{
+    cons=$1
+    num=$(grep -o "encoded.*frames" $cons |awk '{print $2}')
+    echo $num
+}
+function obtain_rc_info_as265
+{
+    cons=$1
+#    num=$(grep -n "****** internal params are listed as follows ******" $cons |awk -F: '{print $1}')
+#    ((num-=2))
+#    vbv_init_time=$(sed -n -e "${num}"'p' $cons|awk -F'=' '{print $2}'|tr -d [:blank:])
+#    ((num--))
+#    vbv_buffer_size=$(sed -n -e "${num}"'p' $cons|awk -F'=' '{print $2}'|tr -d [:blank:])
+#    ((num--))
+#    vbv_max_rate=$(sed -n -e "${num}"'p' $cons|awk -F'=' '{print $2}'|tr -d [:blank:])
+#    ((num--))
+#    target_bitrate=$(sed -n -e "${num}"'p' $cons|awk -F'=' '{print $2}'|tr -d [:blank:])
+
+     target_bitrate=$(grep -o "param\.rc\.i_bitrate=.*" $cons|awk -F'=' '{print $2}'|tr -d [:blank:])
+     vbv_max_rate=$(grep -o "param\.rc\.i_vbv_max_bitrate=.*" $cons|awk -F'=' '{print $2}'|tr -d [:blank:])
+     vbv_buffer_size=$(grep -o "param\.rc\.i_vbv_buffer_size=.*" $cons|awk -F'=' '{print $2}'|tr -d [:blank:])
+     vbv_buffer_init=$(grep -o "param\.rc\.f_vbv_buffer_init=.*" $cons|awk -F'=' '{print $2}'|tr -d [:blank:])
+
+    echo "$target_bitrate $vbv_max_rate $vbv_buffer_size $vbv_buffer_init"
+}
+function obtain_rc_info_x264
+{
+    cons=$1
+    target_bitrate=$(grep -o "param->rc\.i_bitrate=.*" $cons|awk -F'=' '{print $2}'|tr -d [:blank:])
+    vbv_max_rate=$(grep -o "param->rc\.i_vbv_max_bitrate=.*" $cons|awk -F'=' '{print $2}'|tr -d [:blank:])
+    vbv_buffer_size=$(grep -o "param->rc\.i_vbv_buffer_size=.*" $cons|awk -F'=' '{print $2}'|tr -d [:blank:])
+    vbv_buffer_init=$(grep -o "param->rc\.f_vbv_buffer_init=.*" $cons|awk -F'=' '{print $2}'|tr -d [:blank:])
+    echo "$target_bitrate $vbv_max_rate $vbv_buffer_size $vbv_buffer_init"
+}
+function obtain_rc_info_x265
+{
+    cons=$1
+    target_bitrate=$(grep -o "Rate.*AQ-Strength.*CUTree.*" $cons|awk -F':' '{print $2}'|tr -d [:blank:])
+    target_bitrate=${target_bitrate#ABR-}
+    target_bitrate=${target_bitrate%kbps*}
+    vbv_info=$(grep -o "VBV/HRD.*max-rate.*init.*" $cons|awk -F':' '{print $2}' |tr -d [:blank:])
+    vbv_max_rate=$(echo $vbv_info |awk -F'/' '{print $1}')
+    vbv_buffer_size=$(echo $vbv_info |awk -F'/' '{print $2}')
+    echo "$target_bitrate $vbv_max_rate $vbv_buffer_size"
+}
+
+function obtain_final_bitrate_as265
+{
+    cons=$1
+#final_bitrate=$(grep -o "bitrate=.*kbps" $cons)
+#final_bitrate=${final_bitrate#bitrate=}
+#final_bitrate=${final_bitrate%kbps}
+    final_bitrate=$(grep -o "Global.*kbps.*PSNR" $cons|awk -F':' '{print $3}'|awk '{print $1}'|tr -d [:blank:])
+    echo $final_bitrate
+}
+function obtain_final_bitrate_x264
+{
+    cons=$1
+    final_bitrate=$(grep -o "x264 \[info\]:.*kb/s:.*" $cons)
+    final_bitrate=${final_bitrate#*kb/s:}
+    echo $final_bitrate
+}
+function obtain_final_bitrate_x265
+{
+    cons=$1
+    final_bitrate=$(grep -o "x265 \[info\]: global :.*" $cons|awk -F':' '{print $5}'|tr -d [:blank:])
+    final_bitrate=${final_bitrate%PSNR*}
+    echo $final_bitrate
+}
+function obtain_psnr_info_as265
+{
+    cons=$1
+    psnr_value=$(grep -o "psnry=.*psnru=.*psnrv=.*psnrtotal=.*" $cons)
+    psnry=$(echo $psnr_value|awk '{print $1}'|tr -d [:blank:]);psnry=${psnry#psnry=}
+    psnru=$(echo $psnr_value|awk '{print $2}'|tr -d [:blank:]);psnru=${psnru#psnru=}
+    psnrv=$(echo $psnr_value|awk '{print $3}'|tr -d [:blank:]);psnrv=${psnrv#psnrv=}
+    psnrtotal=$(echo $psnr_value|awk '{print $4}'|tr -d [:blank:]);psnrtotal=${psnrtotal#psnrtotal=}
+    echo "$psnry $psnru $psnrv $psnrtotal"
+}
+
+function obtain_ssim_info_as265
+{
+    cons=$1
+    ssim_value=$(grep -o "ssimy=.*ssimu=.*ssimv=.*ssimtotal=.*" $cons)
+    ssimy=$(echo $ssim_value|awk '{print $1}'|tr -d [:blank:]);ssimy=${ssimy#ssimy=}
+    ssimu=$(echo $ssim_value|awk '{print $2}'|tr -d [:blank:]);ssimu=${ssimu#ssimu=}
+    ssimv=$(echo $ssim_value|awk '{print $3}'|tr -d [:blank:]);ssimv=${ssimv#ssimv=}
+    ssimtotal=$(echo $ssim_value|awk '{print $4}'|tr -d [:blank:]);ssimtotal=${ssimtotal#ssimtotal=}
+    echo "$ssimy $ssimu $ssimv $ssimtotal"
+}
+function obtain_psnr_info_x264
+{
+    echo ""
+}
+function obtain_psnr_info_x265
+{
+    echo ""
+}
+function obtain_ssim_info_x264
+{
+    echo ""
+}
+function obtain_ssim_info_x265
+{
+    echo ""
+}
+
+function test_file 
+{
+    tt=$1
+    [ -f $tt ] && >$tt || touch $tt
+}
+

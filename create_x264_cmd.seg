@@ -1,0 +1,5 @@
+format_string="frame=.*bits" 
+cmd="grep -o \"$format_string\" $cons"
+cmd="$cmd|awk '{print \$$idx}'"
+cmd="$cmd|awk -F\= '{print \$2}'"
+cmd="$cmd|tr -t '\n' ' '"
