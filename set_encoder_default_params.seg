@@ -113,11 +113,10 @@ common_path="/cygdrive/d/workspace/"
 #encoder_paths["as265"]=${common_path}"arcsoft_codes/HEVC_Codec/bin/Win32/Release/" 
 encoder_paths["as265"]=${common_path}"arcsoft_codes/HEVC_Codec/HEVC_Encoder/bin/x64/Release_WithTrace/" 
 
-#encoder_paths["x265"]=${common_path}"src.x265/multicoreware-x265_latest/build/vc10-x86_64/Release/"
-#encoder_paths["x265"]=${common_path}"src.x265/multicoreware-x265-hfz/build/vc10-x86_64/Release/"
 #encoder_paths["x265"]=${common_path}"arcsoft_codes/HEVC_Codec/HEVC_Encoder/multicoreware-x265_stable_v1.4_20141101_rc/build/vc10-x86_64/Release/"
 #encoder_paths["x265"]=${common_path}"arcsoft_codes/HEVC_Codec/HEVC_Encoder/multicoreware-x265_stable_v1.5_20150214_rc/build/vc10-x86_64/Release/"
-encoder_paths["x265"]=${common_path}"arcsoft_codes/HEVC_Codec/HEVC_Encoder/tool_X265_stable_2015_02_14_b6be305a2f99_modified_for_performance_test/build/vc10-x86_64/Release/"
+#encoder_paths["x265"]=${common_path}"arcsoft_codes/HEVC_Codec/HEVC_Encoder/tool_X265_stable_2015_02_14_b6be305a2f99_modified_for_performance_test/build/vc10-x86_64/Release/"
+#encoder_paths["x265"]=${common_path}"src.x265/trunk/multicoreware-x265-9f0324125f53/build/vc10-x86_64/Release/"
 
 encoder_paths["x264L"]=${common_path}"src.x264/x264_latest/bin/Release/"
 encoder_paths["x264"]=${common_path}"src.x264/x264-snapshot-20121028-2245-win-hfz/Test_Project/Test_Windows/Release/"
@@ -137,7 +136,7 @@ encoder_helps["hme"]="--help"
 #encoder_helps["ffmpeg"]="--help"
 
 #scripts path
-scripts_path="/cygdrive/d/workspace/as265_shell_scripts/"
+scripts_path="/cygdrive/d/workspace/as265_shell_scripts/trunk/"
 
 declare -A cl_list
 cl_list["as265"]=${scripts_path}"create_cl_as265.seg"
