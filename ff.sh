@@ -1,6 +1,6 @@
 #!/bin/bash
 usage(){
-    echo "$0 [option]"
+    echo "usage:ff.sh [option]"
     echo "options:"
     echo ' -i <string> input_file'
     echo ' -C <string> the ffmpeg commands'
@@ -30,7 +30,7 @@ while getopts ":i:C:e:hH" OPT; do
     esac
 done 
 shift $(($OPTIND - 1))
-
+input_file="*6*mp4"
 if [ ! -z "$*" ];then
     output_file="$*"
 fi
@@ -48,7 +48,7 @@ echo $file_ext
 
 if [ -z $output_file ];then
     if [ -z $ext ];then
-        output_file=$file_name"_out"$file_ext
+        output_file=$file_name"_out."$file_ext
     else
         if [ ${ext:0:1} != '.' ];then
             ext="."$ext
@@ -58,9 +58,9 @@ if [ -z $output_file ];then
 fi
 
 cmd_line=$FFMPEG_BIN
-cmd_line=$cmd_line" -i "$input_file
+cmd_line=$cmd_line" -i \"$input_file\""
 cmd_line=$cmd_line" "$extra_cmd
-cmd_line=$cmd_line" "$output_file
+cmd_line=$cmd_line" \"$output_file\""
 echo $cmd_line
 eval $cmd_line
 
