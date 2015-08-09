@@ -30,21 +30,21 @@ while getopts ":i:C:e:hH" OPT; do
     esac
 done 
 shift $(($OPTIND - 1))
-input_file="*6*mp4"
+#input_file=./*6*mp4
 if [ ! -z "$*" ];then
     output_file="$*"
 fi
 
-echo $input_file
-echo $output_file
+echo "input_file="$input_file
+echo "output_file="$output_file
 if [ -z $input_file ];then
     usage;
     exit;
 fi
 file_name=${input_file%.*}
 file_ext=${input_file##*.}
-echo $file_name
-echo $file_ext
+echo "file_name="$file_name
+echo "file_ext="$file_ext
 
 if [ -z $output_file ];then
     if [ -z $ext ];then
@@ -62,5 +62,5 @@ cmd_line=$cmd_line" -i \"$input_file\""
 cmd_line=$cmd_line" "$extra_cmd
 cmd_line=$cmd_line" \"$output_file\""
 echo $cmd_line
-eval $cmd_line
+#eval $cmd_line
 
