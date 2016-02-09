@@ -1,0 +1,20 @@
+#!/bin/bash
+SPASS=/usr/bin/sshpass
+if [ ! -f "$SPASS"  ];then
+   echo "$SPASS does not exist, it will be installed"
+   if [ -f "/usr/bin/apt-get" ];then
+        sudo apt-get install sshpass
+   else
+        sudo yum install sshpass
+   fi
+fi
+
+if [ $# -ne 1 ];then
+   echo "Invaild parameter"
+   echo "Usage:goto <id>"
+   exit 1
+fi
+ipaddr="10.200.13."$1
+cmd="sshpass -p ahgxtx ssh ubuntu@$ipaddr"
+#echo $cmd
+eval $cmd

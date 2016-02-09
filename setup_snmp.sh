@@ -1,4 +1,16 @@
 #!/bin/bash
+# this script should be executed under ubuntu
+
+function error{
+      printf '\E[31m'
+      echo "$@"
+      printf '\E[0m'
+}
+if [[ ! $EUID -eq 0  ]]; then
+    error "This script should not be run using sudo or as the root user"
+    exit 1
+fi
+
 ret=$(route|grep '172.16.9.64.*10.200.13.1.*255.255.255.192')
 if [ "$ret" == "" ];then
    echo "route will be added"
