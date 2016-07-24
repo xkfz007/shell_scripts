@@ -1,4 +1,5 @@
 #!/bin/bash
+#delete small size pics
 for i in *
 do
     if [ ! -d $i ];then

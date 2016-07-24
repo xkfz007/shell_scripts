@@ -1,4 +1,5 @@
 #!/bin/bash
+#change filenames by reading them from multi-files
 exec 3<007en
 exec 4<007cn
 no=1

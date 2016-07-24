@@ -1,4 +1,5 @@
 #!/bin/bash
+#use mplayer to play yuv files
 usage(){
     echo "usage:$0 filename [option]"
     exit

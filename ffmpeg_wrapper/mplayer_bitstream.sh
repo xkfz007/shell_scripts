@@ -1,4 +1,5 @@
 #!/bin/bash
+#using mplayer to play bitstream
 usage(){
     echo "usage:$0 filename [option]"
     exit
