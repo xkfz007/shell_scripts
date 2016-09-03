@@ -12,6 +12,7 @@ dic=(['cs']="e:/virtual_machines/CentOS-Server/CentOS-Server.vmx"  \
      ['us2']="e:/virtual_machines/Ubuntu-Server2/Ubuntu-Server.vmx"  \
      ['us3']="e:/virtual_machines/Ubuntu-Server3/Ubuntu-Server.vmx"  \
      ['xs']="e:/virtual_machines/XUbuntu-Server/XUbuntu-Server.vmx"  \
+     ['xs2']="e:/virtual_machines/XUbuntu-Server2/XUbuntu-Server.vmx"  \
     )
 key=$1
 vmx_path=${dic[$key]}
