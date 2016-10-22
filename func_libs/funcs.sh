@@ -111,6 +111,21 @@ function is_number
    fi
 }
 
+#check if str startswith substr
+startswith(){
+    local str=$1
+    local substr=$2
+    if [[ "$str" == "$str2"* ]];then
+        echo "1"
+    else
+        echo "0"
+    fi
+}
+#TEST CODES
+#startswith "ddfwerewr" "dd"
+#startswith "N-11995"   "N-"
+#startswith "/usr/bin/" "/usr"
+
 # Avoid locale weirdness, besides we really just want to translate ASCII.
 toupper(){
     #echo "$@" | tr abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ

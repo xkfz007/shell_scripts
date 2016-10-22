@@ -47,6 +47,13 @@
 #   content=$3
 #   sed -i "${lineno}s/.*/${content}/g" $f
 #}
+#function replace_line2
+#{
+#   f=$1
+#   pat=$2
+#   content=$3
+#   sed -i "/${pat}/s/.*/${content}/g" $f
+#}
 #function change_pc
 #{
 #    f=$1
@@ -55,11 +62,26 @@
 #    path2=${path//\//\\\/}
 #    echo "path2"=$path2
 #    line_content="prefix=$path2"
-#    replace_line "$f" 1 "$line_content"
+#    #replace_line "$f" 1 "$line_content"
+#    replace_line2 "$f" "^prefix=" "$line_content"
 #
 #}
 ##change_pc x265.pc "\/usr\/bin\/"
-#change_pc x265.pc "/usr/lib/"
-##replace_line x265.pc 1 "\/usr\/bin\/"
-#cat x265.pc
+#change_pc fdk-aac.pc "/usr/libaa_ccc/"
+#echo 
+#cat fdk-aac.pc
+
+startswith(){
+    local str=$1
+    local substr=$2
+    if [[ "$str" == "$str2"* ]];then
+        echo "1"
+    else
+        echo "0"
+    fi
+}
+
+startswith "ddfwerewr" "dd"
+startswith "N-11995"   "N-"
+startswith "/usr/bin/" "/usr"
 
