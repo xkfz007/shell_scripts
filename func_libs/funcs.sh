@@ -149,4 +149,8 @@ sh_quote(){
 cleanws(){
     echo "$@" | sed 's/^ *//;s/[[:space:]][[:space:]]*/ /g;s/ *$//'
 }
+#get file size
+size() {  
+  stat -c %s $1 | tr -d '\n'  
+}  
  

@@ -7,12 +7,9 @@ fi
 declare -A  dic
 dic=(['cs']="e:/virtual_machines/CentOS-Server/CentOS-Server.vmx"  \
      ['cs2']="e:/virtual_machines/CentOS-Server2/CentOS-Server2.vmx"  \
-     ['cs3']="e:/virtual_machines/CentOS-Server2/CentOS-Server3.vmx"  \
      ['us']="e:/virtual_machines/Ubuntu-Server/Ubuntu-Server.vmx"  \
-     ['us2']="e:/virtual_machines/Ubuntu-Server2/Ubuntu-Server.vmx"  \
-     ['us3']="e:/virtual_machines/Ubuntu-Server3/Ubuntu-Server.vmx"  \
      ['xs']="e:/virtual_machines/XUbuntu-Server/XUbuntu-Server.vmx"  \
-     ['xs2']="e:/virtual_machines/XUbuntu-Server2/XUbuntu-Server.vmx"  \
+     ['xs2']="e:/virtual_machines/ubuntu14.04-server/ubuntu14.04-server.vmx"  \
     )
 key=$1
 vmx_path=${dic[$key]}
